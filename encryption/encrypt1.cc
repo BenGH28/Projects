@@ -18,7 +18,6 @@
 #include<iostream>
 #include<string>
 #include<queue>
-#include<fstream>
 using namespace std;
 
 void toAscii(string&);
@@ -26,54 +25,54 @@ void onQ(string&, queue<int>&);
 void readQ(queue<int>);
 void encrypt(string&);
 void decrypt(string&, queue<int>&);
+const int OFFSET = 4578;
 
 int main()
 {
   queue<int> decr;
   string message, enMess;
-  char ans;
   int choice;
+
   cout << "Press 1 for encryption or 2 for decryption: ";
   cin >> choice;
-  
-  if(choice == 1){
-    encrypt(message);
-  }
-  else{
-    decrypt(enMess, decr);
-  }
+  do{
+    if(choice == 1)
+      encrypt(message);
+    else
+      decrypt(enMess, decr);
+    cout<< "Press 1 for encryptio or 2 for decryption or 0 to quit.";
+    cin >> choice;
+    }
+  while (choice == 1 || choice == 2);
   return 0;
-    
 }
 
-		 
+
 void toAscii(string& a)
 {
-  for(int i = 0; i < a.size(); i++){
-    cout<< static_cast<int>(a[i]) << " ";
-  }
-      cout << endl;
+  for(int i = 0; i < a.size(); i++)
+    cout<< static_cast<int>(a[i]) + OFFSET << " ";
+  cout << endl;
 }
-  
 void onQ(string& a, queue<int>& b){
-  int j = 0;
-  string sub;
-  int num;
+  int j = 0;//the start of he word
+  string sub;//the word that is pushed
+  int num; //the string now a number
   for(int i = 0; i < a.size(); i++){
-    if(a[i] == ' ' && j == 0){ //beginning edge case	
+    if(a[i] == ' ' && j == 0){ //beginning edge case
       sub = a.substr(j,i);
-      num = stoi(sub);
+      num = stoi(sub) - OFFSET;
       b.push(num);
       j = i+1;
     }
     else if(i == a.size()-1){ //end edge case
       sub = a.substr(j, ((i-j)+1));
-      num = stoi(sub);
+      num = stoi(sub) - OFFSET;
       b.push(num);
     }
     else if(a[i] == ' '){
       sub = a.substr(j,i-j );
-      num = stoi(sub);
+      num = stoi(sub) - OFFSET;
       b.push(num);
       j = i + 1;
     }
@@ -92,23 +91,15 @@ void readQ(queue<int> q){
   cout << "Your message is: " << dMess << endl;
 }
 void encrypt(string& a){
-  cout <<"Enter the message you would like to encrypt?"<<endl;
+  cout << "Enter the message you would like to encrypt?" <<endl;
   cin.ignore();
   getline(cin, a);
   toAscii(a);
 }
 void decrypt(string& a, queue<int>& q){
- cout <<"Enter the encrypted message below." << endl;
+ cout << "Enter the encrypted message below." << endl;
  cin.ignore();
  getline(cin, a);
  onQ(a, q);
  readQ(q);
 }
-
-
-    
-  
-  
-  
-  
-  
