@@ -31,16 +31,16 @@ int main()
     for(int i = 0; i < size; i++){
       name[first] = vow[rand()%6];
       name[next] = con[rand()%22];
-      first = next;
-      next++;
+      first += 2;
+      next += 2;
     }
   }
   else{
     for(int i = 0; i < size; i++){
       name[first] = con[rand()%22];
       name[next] = vow[rand()%6];
-      first = next;
-      next++;
+      first += 2;
+      next += 2;
     }
   }
   print(name,size);
