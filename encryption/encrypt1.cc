@@ -32,26 +32,35 @@ int main()
   queue<int> decr;
   string message, enMess;
   int choice;
+  int pass;
 
   cout << "Press 1 for encryption or 2 for decryption: ";
   cin >> choice;
   do{
     if(choice == 1)
       encrypt(message);
-    else
-      decrypt(enMess, decr);
-    cout<< "Press 1 for encryptio or 2 for decryption or 0 to quit.";
-    cin >> choice;
+    else{
+      cout << "Enter password: ";
+      cin >> pass;
+      if(pass == OFFSET)
+        decrypt(enMess, decr);
+      else{
+        cout << "ACCESS DENIED...YOU ARE NOT ALLOWED TO BE HERE...LEAVE NOW"<<endl;
+        break;
+      }
     }
-  while (choice == 1 || choice == 2);
+    cout<< "Press 1 for encryption or 2 for decryption or 0 to quit";
+    cin >> choice;
+    cout << endl;
+    }
+  while (choice == 1 || (choice == 2));
   return 0;
 }
 
 
-void toAscii(string& a)
-{
+void toAscii(string& a){
   for(int i = 0; i < a.size(); i++)
-    cout<< static_cast<int>(a[i]) + OFFSET << " ";
+    cout<< static_cast<int>(a[i]) * OFFSET << " ";
   cout << endl;
 }
 void onQ(string& a, queue<int>& b){
@@ -61,18 +70,18 @@ void onQ(string& a, queue<int>& b){
   for(int i = 0; i < a.size(); i++){
     if(a[i] == ' ' && j == 0){ //beginning edge case
       sub = a.substr(j,i);
-      num = stoi(sub) - OFFSET;
+      num = stoi(sub) / OFFSET;
       b.push(num);
       j = i+1;
     }
     else if(i == a.size()-1){ //end edge case
       sub = a.substr(j, ((i-j)+1));
-      num = stoi(sub) - OFFSET;
+      num = stoi(sub) / OFFSET;
       b.push(num);
     }
     else if(a[i] == ' '){
       sub = a.substr(j,i-j );
-      num = stoi(sub) - OFFSET;
+      num = stoi(sub) / OFFSET;
       b.push(num);
       j = i + 1;
     }
