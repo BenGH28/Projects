@@ -101,7 +101,6 @@ void encrypt(string& a){
   cin.ignore();
   getline(cin, a);
   cout << "Please enter a key to complete encryption"<<endl;
-  //cin.ignore();
   cin >> key;
   toAscii(a,key);
 }
@@ -111,7 +110,6 @@ void decrypt(string& a, queue<int>& q){
  cin.ignore();
  getline(cin, a);
  cout << "Please enter the decryption key: ";
- //cin.ignore();
  cin >> key;
  onQ(a, q, key);
  readQ(q);
