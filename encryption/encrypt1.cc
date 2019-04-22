@@ -20,37 +20,33 @@
 #include<queue>
 using namespace std;
 
-void toAscii(string&);
-void onQ(string&, queue<int>&);
-void readQ(queue<int>);
+void toAscii(string&, int);
+void onQ(string&, queue<int>&, int);
+void readQ(queue<int>&);
 void encrypt(string&);
 void decrypt(string&, queue<int>&);
-const int OFFSET = 4578;
 
 int main()
 {
   queue<int> decr;
   string message, enMess;
   int choice;
-  int pass;
+
 
   cout << "Press 1 for encryption or 2 for decryption: ";
   cin >> choice;
   do{
     if(choice == 1)
       encrypt(message);
-    else{
-      cout << "Enter password: ";
-      cin >> pass;
-      if(pass == OFFSET)
-        decrypt(enMess, decr);
-      else{
-        cout << "ACCESS DENIED...YOU ARE NOT ALLOWED TO BE HERE...LEAVE NOW"<<endl;
-        break;
-      }
-    }
-    cout<< "Press 1 for encryption or 2 for decryption or 0 to quit";
+    else
+      decrypt(enMess, decr);
+
+    cout<< "Press 1 for encryption or 2 for decryption or 0 to quit: ";
     cin >> choice;
+
+    //reset
+    message = "";
+    enMess = "";
     cout << endl;
     }
   while (choice == 1 || (choice == 2));
@@ -58,36 +54,36 @@ int main()
 }
 
 
-void toAscii(string& a){
-  for(int i = 0; i < a.size(); i++)
-    cout<< static_cast<int>(a[i]) * OFFSET << " ";
+void toAscii(string& a, int key){ //converting message to ascii code and multiplying by the key
+  for(unsigned int i = 0; i < a.size(); i++)
+    cout<< static_cast<int>(a[i]) * key << " ";
   cout << endl;
 }
-void onQ(string& a, queue<int>& b){
+void onQ(string& a, queue<int>& b, int key){//where the parsing of the encrypted message happens
   int j = 0;//the start of he word
-  string sub;//the word that is pushed
-  int num; //the string now a number
-  for(int i = 0; i < a.size(); i++){
+  string sub;//the word that is pushed to queue
+  int num; //the string of numbers now an integer
+  for(unsigned int i = 0; i < a.size(); i++){
     if(a[i] == ' ' && j == 0){ //beginning edge case
       sub = a.substr(j,i);
-      num = stoi(sub) / OFFSET;
+      num = stoi(sub) / key;
       b.push(num);
       j = i+1;
     }
     else if(i == a.size()-1){ //end edge case
       sub = a.substr(j, ((i-j)+1));
-      num = stoi(sub) / OFFSET;
+      num = stoi(sub) / key;
       b.push(num);
     }
-    else if(a[i] == ' '){
+    else if(a[i] == ' '){//everthing in between
       sub = a.substr(j,i-j );
-      num = stoi(sub) / OFFSET;
+      num = stoi(sub) / key;
       b.push(num);
       j = i + 1;
     }
   }
 }
-void readQ(queue<int> q){
+void readQ(queue<int>& q){
   int asciiInt;
   char asciiChar;
   string dMess = "";
@@ -97,18 +93,26 @@ void readQ(queue<int> q){
     dMess += asciiChar;
     q.pop();
   }
-  cout << "Your message is: " << dMess << endl;
+  cout << endl << "Your message is: " << dMess << endl;
 }
 void encrypt(string& a){
+  int key = 0;
   cout << "Enter the message you would like to encrypt?" <<endl;
   cin.ignore();
   getline(cin, a);
-  toAscii(a);
+  cout << "Please enter a key to complete encryption"<<endl;
+  //cin.ignore();
+  cin >> key;
+  toAscii(a,key);
 }
 void decrypt(string& a, queue<int>& q){
+ int key = 0;
  cout << "Enter the encrypted message below." << endl;
  cin.ignore();
  getline(cin, a);
- onQ(a, q);
+ cout << "Please enter the decryption key: ";
+ //cin.ignore();
+ cin >> key;
+ onQ(a, q, key);
  readQ(q);
 }
