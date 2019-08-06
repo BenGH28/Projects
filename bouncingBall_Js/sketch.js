@@ -1,7 +1,18 @@
+let size = 100;
+let balls = new Array(size);
 function setup(){
-    createCanvas(400, 400);
-    background(100,100,100);
+    createCanvas(600, 400);
+    for(let i = 0; i < balls.length; i++){
+        balls[i] = new Ball();
+    }
 }
 function draw(){
-    rect(200,200, 50, 50, 12);
+    background(240,230, 222);
+    for(let i = 0; i < balls.length; i++){
+        balls[i].show();
+        balls[i].move();
+        balls[i].bounce();
+        //balls[i].intersect(balls[i+1])
+
+    }
 }
