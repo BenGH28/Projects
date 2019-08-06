@@ -1,4 +1,5 @@
-let size = 100;
+let size = 20;
+let divisor = 1.01
 let balls = new Array(size);
 function setup(){
     createCanvas(600, 400);
@@ -12,7 +13,12 @@ function draw(){
         balls[i].show();
         balls[i].move();
         balls[i].bounce();
-        //balls[i].intersect(balls[i+1])
+        for(let j = 0; j < balls.length; j++){
+            if(i != j && balls[i].intersect(balls[j])){
+                balls[i].rad /= divisor;
+                balls[j].rad /= divisor;
+            }
+        }
 
     }
 }
