@@ -1,0 +1,6 @@
+This is a test message.
+Does it work?
+How about strange characters: !@#$%^&*()_+{}:"|<>?;:[]\/
+	And whitespace	 	!
+
+Good!

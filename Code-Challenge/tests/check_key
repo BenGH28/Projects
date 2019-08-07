@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+"""
+Checks the contents of a substitution cipher key ensuring that
+1. each byte value is used exacly once on both the left and right
+sides of the mapping.
+2. the key is properly formatted
+"""
+import sys
+
+def main():
+	expected_bytes = {b for b in range(256)}
+	left = set()
+	right = set()
+	for line in sys.stdin.readlines():
+		parts = [int(i) for i in line.split()]
+		assert len(parts) == 2, "Expected exactly 2 elements on a line, found {}".format(len(parts))
+		left.add(parts[0])
+		right.add(parts[1])
+	
+	exit_code = 0
+	if expected_bytes != left:
+		exit_code = 1
+		missing = expected_bytes - left
+		extra = left - expected_bytes
+		print("left side of key has missing/extra values:\n\tmissing: {}\n\textra: {}".format(missing or "", extra or ""), file=sys.stderr)
+	if expected_bytes != right:
+		exit_code = 1
+		missing = expected_bytes - right
+		extra = right - expected_bytes
+		print("right side of key has missing/extra values:\n\tmissing: {}\n\textra: {}".format(missing or "", extra or ""), file=sys.stderr)
+	sys.exit(exit_code)
+
+main()
