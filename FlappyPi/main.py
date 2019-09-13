@@ -12,17 +12,43 @@ needed:
 """
 
 import pygame as pg
-from sys import exit
+import sys
+from pygame.locals import *
+from pi import Pi 
 
+#the window to play in===========================================
 pg.init()
-size = 400, 400
-screen = pg.display.set_mode(size)
-# pg.display.flip()
-# running = True
-# while running:
-#     for event in pg.event.get():
-#         if event == pg.QUIT:
-#             running = False
-#             pg.display.quit()
-#             pg.quit()
-# exit()
+height = 800
+width = 400
+size = (width, height)
+gameWindow = pg.display.set_mode(size)
+pg.display.set_caption("Flappy Pi")
+pg.display.flip()
+
+#the colours used================================================
+RED = (255,0,0)
+GREEN = (0, 255, 0)
+BLUE = (0,0,255)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+
+#the Sprite======================================================
+flappy = Pi(200,200)
+
+#The Game Loop===================================================
+while True:
+    gameWindow.fill(WHITE)
+    flappy.show(gameWindow)
+    flappy.applyForce()  
+    flappy.fly()
+
+    if flappy.y >= height:
+            pg.quit()
+            sys.exit()
+   
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
+            sys.exit()
+        
+    pg.display.update()
