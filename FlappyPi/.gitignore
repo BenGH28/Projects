@@ -1,0 +1,5 @@
+# folders to ignore for FlappyPi
+venv
+.idea
+__pycache__
+.vscode
