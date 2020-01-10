@@ -1,37 +1,62 @@
-import math
-from math import gcd, floor, fabs
+"""A toy RSA module."""
+import secrets
+from math import gcd
 from random import randint
 from primeCheck3 import isPrime
 
-# a little module created to generate and calculate the various
-# functions required for RSA
 
+def makePrimes(bits):
+    """
+    Generates the prime numbers p and q.  
 
-def makePrimes(a, b, c, d):
-    try:
-        p = randint(a, b)
-        q = randint(c, d)
-    except ValueError:
-        print(f"ensure {a} < {b} and {c} < {d}")
-        return -1
+    Param bits: int -- the bit length of each prime  
 
-    for _ in range(100):
-        if isPrime(p) == True and isPrime(q) == True:
+    Returns a tuple of prime numbers.
+    """
+    p = None
+    q = None
+    for _ in range(500):
+        p = secrets.randbits(bits)
+        q = secrets.randbits(bits)
+        if p != q and p > 3 and q > 3 and isPrime(p) == True and isPrime(q) == True:
             return (p, q)
-        p = randint(a, b)
-        q = randint(c, d)
-    return (-1, -1)
 
 
 def totient(p, q):
+    """Computes Eulers totient.
+
+    Params:
+        p: int -- a prime number. 
+        q: int -- a prime number.
+
+    Returns an int -- the totient value of p * q.
+    """
+    if p == q:
+        raise ValueError("Totient function requires dissimilar inputs")
     return (p-1)*(q-1)
 
 
 def makeN(p, q):
-    return p*q
+    """Where we compute the modulus value.
+
+    Params:
+        p: int -- a prime number.
+        q: int -- a prime number.
+
+    Returns an int-- the modulus value.
+    """
+    return p * q
 
 
 def makePubKey(tot, n):
+    """Creating the public key based on the totient of the modulus and the modulus itself.
+
+    Params:
+        tot: int -- the totient value. 
+        n: int -- the modulus value.
+
+    Returns a tuple.
+    """
     e = 0
     while(gcd(tot, e) != 1):
         e = randint(2, tot)
@@ -39,11 +64,21 @@ def makePubKey(tot, n):
 
 
 def extEuclid(e, tot):
+    """The extended Euclidian algorithm for determining 'd' the private key.
+
+    Params:
+        e: int -- The public key used for encryption.
+        tot: int -- The totient value.
+
+    Returns:
+        int -- 'd' the private decryption key if inverse exists.
+        None -- if there is no inverse.
+    """
     n_zero = tot
     b_zero = e
     t_zero = 0
     t = 1
-    q = n_zero//b_zero
+    q = n_zero // b_zero
     r = n_zero - q * b_zero
     while r > 0:
         temp = t_zero - q * t
@@ -65,6 +100,15 @@ def extEuclid(e, tot):
 
 
 def makePvtKey(e, tot, n):
+    """Making the private key.
+
+    Params:
+        e: int -- The public encryption key.
+        tot: int -- The totient value.
+        n: int -- The modulus value.
+
+    Returns a tuple.
+    """
     while True:
         d = extEuclid(e, tot)
         if d != e:
@@ -72,25 +116,35 @@ def makePvtKey(e, tot, n):
     return (d, n)
 
 
-if __name__ == "__main__":
-    p, q = makePrimes(1000, 2000, 3000, 4000)
+def gen(bits):
+    """Generates the public and private keys.
+
+    Param bits: int -- bit length for prime generation.
+
+    Returns a tuple of tuples.
+    """
+    p, q = makePrimes(bits)
     tot = totient(p, q)
     n = makeN(p, q)
     PU = makePubKey(tot, n)
-    PR = makePvtKey(PU[0], tot, n)
-
     print(f"public key is: {PU}")
+    e, _ = PU
+    PR = makePvtKey(e, tot, n)
     print(f"private key is: {PR}")
+    return (PU, PR)
+
+
+if __name__ == "__main__":
+    PU, PR = gen(8)
 
     # encryption
-    m = 19
-    print(f"encrypting {m}")
-    power = m ** PU[0]
-    cipher = int(power % PU[1])
-    print(f"Cipher: {cipher}")
+    e, n = PU
+    d, _ = PR
+    m = 50
+    print(f"original message: {m}")
+    cipher = (m ** e) % n
+    print(f"cipher {cipher}")
 
     # decryption
-    print(f"decrypting {cipher}")
-    power1 = cipher ** PR[0]
-    decipher = int(power1 % PR[1])
-    print(f"original message: {decipher}")
+    message = (cipher ** d) % n
+    print(f"message: {message}")
