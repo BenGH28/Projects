@@ -2,6 +2,12 @@ from math import sqrt, ceil
 
 
 def isPrime(x):
+    """Primality test.
+
+    Param x: int.
+
+    Returns True if x is prime, False otherwise.
+    """
     prime = True
     if x <= 0:
         return "number must be greater than zero"
