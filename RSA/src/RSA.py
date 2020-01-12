@@ -1,4 +1,4 @@
-# """Where RSA cryptography takes place"""
+"""Where RSA cryptography takes place"""
 
 #!/usr/bin/env python3
 import generator as g
@@ -16,7 +16,8 @@ def intKey(key):
             return k
         return -1
     except:
-        print(f'invalid key')
+        print(
+            f"ERROR: invalid key -- '{sys.argv[2]}' is not valid numeric format.\nProper format: 11,17")
         sys.exit()
 
 
@@ -29,7 +30,7 @@ def crypto(file, key):
         member = line.split(' ')
         for value in member:
             if int(value) == 0:
-                continue
+                pass
             if sys.argv[1] == '-e':
                 cipher = encrypt(int(value), key)
                 toWrite += str(cipher) + " "
@@ -64,7 +65,7 @@ def decrypt(cipher, PR):
 if __name__ == "__main__":
     words = ("Commands:\n"
              "   -g     Generate encryption keys and write\n"
-             "           them to a document of your choosing.\n"
+             "          them to a document of your choosing.\n"
              "               e.g. RSA.py -g file_To_write_to.txt\n\n"
 
              "   -e     Encrypt using [key] on [file].\n"
@@ -83,24 +84,18 @@ if __name__ == "__main__":
             with open(sys.argv[2], 'w+') as f:
                 f.write(f"Public key: {PU}\nPrivate key: {PR}")
         else:
-            print(f"Invalid command. Did you mean to use '-g'?\n{words}")
+            print(f"ERROR: Invalid Command -- {sys.argv[1]}\n{words}")
 
     elif len(sys.argv) == 4:
         key = intKey(sys.argv[2])
         if sys.argv[1] == '-e':
             if key != -1:
                 workOnFile('output.txt', key)
-            else:
-                print(
-                    f"key:{sys.argv[2]} is not valid numeric format.\n   e.g. 11,17")
         elif sys.argv[1] == '-d':
             if key != -1:
                 workOnFile('message.txt', key)
-            else:
-                print(
-                    f"key: {sys.argv[2]} is not valid numeric format.\n   e.g. 11,17")
         else:
-            print(f"Invalid Command: {sys.argv[1]}\n{words}")
+            print(f"ERROR: Invalid Command -- {sys.argv[1]}\n{words}")
     else:
         print(
-            f"ERROR: expected 3 arguments received {len(sys.argv) - 1}\n {words}")
+            f"ERROR: expected 2 or 3 arguments received {len(sys.argv) - 1}\n{words}")
