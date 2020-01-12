@@ -1,12 +1,16 @@
 """Where RSA cryptography takes place"""
 
-#!/usr/bin/env python3
 import generator as g
-import os
 import sys
 
 
 def intKey(key):
+    """Converts a string to tuple of ints
+
+    param key: string -- the key from standard input
+
+    Returns a tuple of ints if correct format or -1 otherwise
+    """
     try:
         if key.find(',') != -1:
             newK = key.split(',')
@@ -22,6 +26,13 @@ def intKey(key):
 
 
 def crypto(file, key):
+    """Cryptographic reading and writing of files.
+
+    Params:
+        file: string -- name of file.
+        key: tuple of ints
+    Returns nothing.
+    """
     toWrite = ""
     with open(sys.argv[3], 'r') as f:
         data = f.readlines()
@@ -43,6 +54,11 @@ def crypto(file, key):
 
 
 def workOnFile(fileName, key):
+    """
+    Params:
+        fileName: string
+        key: tuple of ints
+    """
     try:
         with open(fileName, 'w') as c:
             crypto(c, key)
@@ -51,12 +67,28 @@ def workOnFile(fileName, key):
 
 
 def encrypt(m, PU):
+    """Encryption
+
+    Param:
+        m: int -- value to encrypt
+        PU: tuple of ints -- key
+
+    Returns ciphertext
+    """
     e, n = PU
     cipher = (m ** e) % n
     return cipher
 
 
 def decrypt(cipher, PR):
+    """Decryption
+
+    Param:
+        cipher: int -- value to decrypt
+        PR: tuple of ints -- key
+
+    Returns message
+    """
     d, n = PR
     decipher = (cipher ** d) % n
     return decipher
