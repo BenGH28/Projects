@@ -1,4 +1,8 @@
-"""Where RSA cryptography takes place"""
+"""Where RSA cryptography takes place.
+This program was created to encrypt the keys required for the Code-Challenge and will only work
+with files formatted in like them.
+
+"""
 
 import generator as g
 import sys
@@ -98,13 +102,13 @@ if __name__ == "__main__":
     words = ("Commands:\n"
              "   -g     Generate encryption keys and write\n"
              "          them to a document of your choosing.\n"
-             "               e.g. RSA.py -g file_To_write_to.txt\n\n"
+             "               e.g. RSA.py -g [file_To_Write_To]\n\n"
 
              "   -e     Encrypt using [key] on [file].\n"
-             "               e.g. RSA.py -e Public,key file_To_Encrypt.txt\n\n"
+             "               e.g. RSA.py -e <Public,key> [file_To_Encrypt]\n\n"
 
              "   -d     decrypt a file with a specified key.\n"
-             "               e.g. RSA.py -d Private,key file_To_Decrypt.txt")
+             "               e.g. RSA.py -d <Private,key> [file_To_Decrypt]")
     if len(sys.argv) < 2:
         print(
             "General Usage:\n    RSA.py <command> [key] [file]\n"
