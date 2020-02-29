@@ -43,7 +43,7 @@ def makeN(p, q):
         p: int -- a prime number.
         q: int -- a prime number.
 
-    Returns an int-- the modulus value.
+    Returns an int -- the modulus value.
     """
     return p * q
 
@@ -135,7 +135,7 @@ def gen(bits):
 
 
 if __name__ == "__main__":
-    PU, PR = gen(8)
+    PU, PR = gen(32)
 
     # encryption
     e, n = PU
